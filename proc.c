@@ -202,6 +202,10 @@ fork(void)
   np->parent = curproc;
   *np->tf = *curproc->tf;
 
+  // TODO:
+  // the page protections should be inherited on fork().
+  // Thus, if a process has mprotected some of its pages, when the process calls fork, the OS should copy those protections to the child process.
+
   // Clear %eax so that fork returns 0 in the child.
   np->tf->eax = 0;
 

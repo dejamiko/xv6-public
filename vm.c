@@ -392,6 +392,49 @@ copyout(pde_t *pgdir, uint va, void *p, uint len)
   return 0;
 }
 
+// Protect the page range starting at addr and of len pages (mark them as read only)
+int sys_mprotect(void *addr, int len) {
+    // if addr is not page aligned,
+    // TODO or addr points to a region that is not currently a part of the address space,
+    // or len is less than or equal to zero
+    if (addr % PGSIZE != 0 || len <= 0)
+        return -1;
+
+    // set all the protection bits
+    for (int i = 0; i < len; ++i) {
+        // TODO have a look at this
+        // This is incredibly sketchy atm
+        *(addr + i * PGSIZE) &= ~PTE_W;
+
+        // updating the CR3 register
+        // This needs to be a physical address
+        lcr3(V2P(addr + i * PGSIZE));
+    }
+
+    return 0;
+}
+
+// Set the region back to both readable and writable
+int sys_munprotect(void *addr, int len) {
+    // if addr is not page aligned,
+    // TODO or addr points to a region that is not currently a part of the address space,
+    // or len is less than or equal to zero
+    if (addr % PGSIZE != 0 || len <= 0)
+        return -1;
+
+    // set all the protection bits
+    for (int i = 0; i < len; ++i) {
+        // This is incredibly sketchy atm
+        *(addr + i * PGSIZE) &= PTE_W;
+
+        // updating the CR3 register
+        // This needs to be a physical address
+        lcr3(V2P(addr + i * PGSIZE));
+    }
+
+    return 0;
+}
+
 //PAGEBREAK!
 // Blank page.
 //PAGEBREAK!
