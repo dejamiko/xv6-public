@@ -391,7 +391,7 @@ int mprotect(void *addr, int len) {
     // iterate through the pages in the range
     current = (uint) addr;
     for (int i = 0; i < len; ++i) {
-        cprintf("mprotect: a = %x\n", current);
+        cprintf("mprotect: current = %x\n", current);
         pageTableEntry = walkpgdir(myproc()->pgdir, (void *) current, 0);
         if (pageTableEntry == 0)
             return -1;
@@ -422,7 +422,7 @@ int munprotect(void *addr, int len) {
     // iterate through the pages in the range
     current = (uint) addr;
     for (int i = 0; i < len; ++i) {
-        cprintf("munprotect: a = %x\n", current);
+        cprintf("munprotect: current = %x\n", current);
         pageTableEntry = walkpgdir(myproc()->pgdir, (void *) current, 0);
         if (pageTableEntry == 0)
             return -1;
