@@ -385,7 +385,7 @@ int mprotect(void *addr, int len) {
         return -1;
     }
 
-    uint current, pageAddress;
+    uint current;
     pte_t *pageTableEntry;
 
     // iterate through the pages in the range
@@ -393,11 +393,10 @@ int mprotect(void *addr, int len) {
     for (int i = 0; i < len; ++i) {
         cprintf("mprotect: current = %x\n", current);
         pageTableEntry = walkpgdir(myproc()->pgdir, (void *) current, 0);
-        if (pageTableEntry == 0)
+        if (pageTableEntry == 0) {
+            cprintf("pageTableEntry==0");
             return -1;
-        pageAddress = PTE_ADDR(*pageTableEntry);
-        if (pageAddress == 0)
-            return -1;
+        }
         // set the page to read only
         *pageTableEntry &= ~PTE_W;
         current += PGSIZE;
@@ -416,7 +415,7 @@ int munprotect(void *addr, int len) {
         return -1;
     }
 
-    uint current, pageAddress;
+    uint current;
     pte_t *pageTableEntry;
 
     // iterate through the pages in the range
@@ -426,11 +425,8 @@ int munprotect(void *addr, int len) {
         pageTableEntry = walkpgdir(myproc()->pgdir, (void *) current, 0);
         if (pageTableEntry == 0)
             return -1;
-        pageAddress = PTE_ADDR(*pageTableEntry);
-        if (pageAddress == 0)
-            return -1;
         // set the page to be writable
-        *pageTableEntry &= PTE_W;
+        *pageTableEntry |= PTE_W;
         current += PGSIZE;
     }
 
