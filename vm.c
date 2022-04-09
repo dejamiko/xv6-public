@@ -380,7 +380,7 @@ copyout(pde_t *pgdir, uint va, void *p, uint len) {
 // Protect the page range starting at addr and of len pages (mark them as read only)
 int mprotect(void *addr, int len) {
     // if addr is not page aligned, or addr points to a region that is not currently a part of the address space, or len is less than or equal to zero
-    if (((uint) addr % PGSIZE) != 0 || addr == 0 || len <= 0) {
+    if (((uint) addr % PGSIZE) != 0 || len <= 0) {
         return -1;
     }
 
@@ -410,7 +410,7 @@ int mprotect(void *addr, int len) {
 // Set the region back to both readable and writable
 int munprotect(void *addr, int len) {
     // if addr is not page aligned, or addr points to a region that is not currently a part of the address space, or len is less than or equal to zero
-    if (((uint) addr % PGSIZE) != 0 || addr == 0 || len <= 0) {
+    if (((uint) addr % PGSIZE) != 0 || len <= 0) {
         return -1;
     }
 
