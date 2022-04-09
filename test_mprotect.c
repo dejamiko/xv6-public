@@ -11,6 +11,8 @@ int main(int argc, char *argv[]) {
     *p = 0x12345678;
     printf(1, "Protect some pages\n");
     mprotect(p, 2);
+    printf(1, "Try to read from protected pages\n");
+    printf(1, "p[0] = %d\n", p[0]);
     printf(1, "Try to write to protected pages\n");
     *p = 0x12345679;
     printf(1, "Should not see this\n");
